@@ -1,9 +1,0 @@
-.sapUiIcon:focus {
-	outline: 1px dashed @sapUiKeyboardFocus;
-}
-
-.sapMTB-Info-CTX .sapUiIcon {
-	width: 1rem;
-	font-size: 1rem;
-	color: @sapUiInvertedElement;
-}
