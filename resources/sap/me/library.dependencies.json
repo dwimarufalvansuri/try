@@ -1,0 +1,106 @@
+{
+  "modules" : [
+    {
+      "name" : "sap/me/Calendar.js",
+      "description" : "Provides control sap.me.Calendar.",
+      "size" : 45343,
+      "compressedSize" : 11535,
+      "required" : ["sap/me/library.js", "sap/ui/core/Control.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/CalendarLegend.js",
+      "description" : "Provides control sap.me.CalendarLegend.",
+      "size" : 20371,
+      "compressedSize" : 5376,
+      "required" : ["sap/me/library.js", "sap/ui/core/Control.js", "sap/ui/core/IconPool.js", "sap/ui/core/theming/Parameters.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/CalendarLegendRenderer.js",
+      "description" : "! SAP UI development toolkit for HTML5 (SAPUI5)  (c) Copyright 2009-2014 SAP AG. All rights reserved",
+      "size" : 2759,
+      "compressedSize" : 1491,
+      "required" : ["jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/CalendarRenderer.js",
+      "description" : "! SAP UI development toolkit for HTML5 (SAPUI5)  (c) Copyright 2009-2014 SAP AG. All rights reserved",
+      "size" : 11631,
+      "compressedSize" : 4359,
+      "required" : ["sap/ui/core/LocaleData.js", "sap/ui/core/format/DateFormat.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/OverlapCalendar.js",
+      "description" : "Provides control sap.me.OverlapCalendar.",
+      "size" : 28296,
+      "compressedSize" : 8750,
+      "required" : ["sap/me/library.js", "sap/ui/core/Control.js", "sap/me/Calendar.js", "sap/ui/core/theming/Parameters.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/OverlapCalendarEvent.js",
+      "description" : "Provides control sap.me.OverlapCalendarEvent.",
+      "size" : 15128,
+      "compressedSize" : 965,
+      "required" : ["sap/me/library.js", "sap/ui/core/Element.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/OverlapCalendarRenderer.js",
+      "description" : "! SAP UI development toolkit for HTML5 (SAPUI5)  (c) Copyright 2009-2014 SAP AG. All rights reserved",
+      "size" : 4010,
+      "compressedSize" : 2323,
+      "required" : ["jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/ProgressIndicator.js",
+      "description" : "Provides control sap.me.ProgressIndicator.",
+      "size" : 13312,
+      "compressedSize" : 3266,
+      "required" : ["sap/me/library.js", "sap/ui/core/Control.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/ProgressIndicatorRenderer.js",
+      "description" : "Provides default renderer for control sap.ui.commons.ProgressIndicator",
+      "size" : 3937,
+      "compressedSize" : 2113,
+      "required" : ["jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/TabContainer.js",
+      "description" : "Provides control sap.me.TabContainer.",
+      "size" : 25596,
+      "compressedSize" : 5684,
+      "required" : ["sap/me/library.js", "sap/ui/core/Control.js", "sap/ui/core/IconPool.js", "sap/ui/core/theming/Parameters.js", "jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/TabContainerRenderer.js",
+      "description" : "! SAP UI development toolkit for HTML5 (SAPUI5)  (c) Copyright 2009-2014 SAP AG. All rights reserved",
+      "size" : 3338,
+      "compressedSize" : 1908,
+      "required" : ["jquery.sap.global.js"],
+      "includes" : []
+    },
+    {
+      "name" : "sap/me/library.js",
+      "description" : "Initialization Code and shared classes of library sap.me (1.21.1-SNAPSHOT)",
+      "size" : 4840,
+      "compressedSize" : 1020,
+      "required" : ["sap/ui/core/Core.js", "sap/ui/core/library.js", "jquery.sap.global.js"],
+      "includes" : ["sap/me/CalendarDesign.js", "sap/me/CalendarEventType.js", "sap/me/CalendarSelectionMode.js"]
+    },
+    {
+      "name" : "sap/me/library.properties",
+      "size" : 581,
+      "required" : [],
+      "includes" : []
+    }
+  ]
+}

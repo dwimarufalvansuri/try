@@ -1,0 +1,130 @@
+/* Global CSS for 'sap_hcb' theme */
+
+// Semantic Theming Mapping
+@sapUiHighlightColor: #7A5100;
+@sapUiContentDisabledTextColor: #666666;
+@sapUiButtonBackground: #000000;
+@sapUiButtonBorderColor: #FFFFFF;
+@sapUiButtonTextColor: #FFFFFF;
+@sapUiButtonDisabledBackground: #000000;
+@sapUiButtonDisabledBorderColor: #666666;
+@sapUiButtonHoverBackground: #7A5100;
+@sapUiButtonHoverBorderColor: #FFFFFF;
+@sapUiButtonHoverTextColor: #FFFFFF;
+@sapUiFieldBackground: #000000;
+@sapUiFieldBorderColor: #FFFFFF;
+@sapUiFieldHoverBorderColor: #FFFFFF;
+@sapUiFieldHoverHelpBackground: @sapUiHighlightColor;
+@sapUiFieldReadOnlyBackground: #585858;
+@sapUiFieldReadOnlyBorderColor: #999999;
+@sapUiFieldInvalidBackground: #AA0000;
+@sapUiFieldInvalidColor: #FF0000;
+@sapUiFieldWarningBackground: #CCAA00;
+@sapUiFieldWarningColor: #FFFFFF;
+@sapUiFieldSuccessBackground: #00AA00;
+@sapUiFieldSuccessColor: #00AA00;
+
+@sapUiListHeaderBackground: #585858;
+@sapUiListHeaderBorderColor: @sapUiBaseBorder;
+@sapUiListSelectionBackgroundColor: @sapUiHighlightColor;
+@sapUiListHoverBackground: @sapUiHighlightColor;
+
+// central colors
+// Brand Colors
+@sapUiHighlight: @sapUiHighlightColor;
+
+// Base Colors
+@sapUiBase: #FFFFFF;
+@sapUiBaseBG: #000000;
+@sapUiBaseText: #FFFFFF;
+
+// Background Colors
+// Grayscale Backgrounds
+@sapUiWhite: #000000;
+@sapUiWhiteBG: #000000;
+@sapUiExtraLightBG: @sapUiBaseBG;
+@sapUiLightBG: @sapUiHighlight;
+@sapUiMediumBG: @sapUiLightBG;
+@sapUiDarkBG: @sapUiLightBG;
+@sapUiDeepBG: #FFFFFF;
+@sapUiBlackBG: #FFFFFF;
+
+// Button Background Colors
+@sapUiButtonStandardBG: @sapUiBaseBG;
+@sapUiButtonEmphasizedBG: @sapUiButtonStandardBG;
+@sapUiButtonNegativeBG: @sapUiButtonStandardBG;
+@sapUiButtonPositiveBG: @sapUiButtonStandardBG;
+
+// Semantic Background Colors
+@sapUiErrorBG: #AA0000;
+@sapUiWarningBG: #CCAA00;
+@sapUiReadOnlyBG: #585858;
+
+// Link
+@sapUiLink: @sapUiText;
+
+// Semantic Text Colors
+@sapUiPositiveText: #00AA00;
+
+// Grayscale Borders
+@sapUiExtraLightBorder: @sapUiBaseBorder;
+@sapUiLightBorder: @sapUiBaseBorder;
+
+// Semantic Border Colors
+@sapUiWarningBorder: @sapUiBaseBorder;
+
+// Table Colors
+@sapUiTableRowBG: #000000;
+@sapUiTableRowAlternatingBG: #444444;
+
+/* ---------------------------------------------------------------------------------------- */
+
+
+
+@sapUiTextDisabled: #666666;
+@sapUiTextSelection: @sapUiText;
+@sapUiTextInverted: darken(@sapUiBaseText, 100%);			// #000000;
+
+@sapUiFontFamily: Arial,Helvetica,sans-serif;
+@sapUiFontSize: 11px;
+@sapUiFontLargeSize: 16px;
+@sapUiFontSmallSize: 10px;
+@sapUiFontHeader1Size: @sapUiFontLargeSize;
+@sapUiFontHeader2Size: 13px;
+@sapUiFontHeader3Size: @sapUiFontSize;
+@sapUiFontHeader4Size: @sapUiFontSmallSize;
+@sapUiFontHeader5Size: @sapUiFontSmallSize;
+@sapUiFontHeader6Size: @sapUiFontSmallSize;
+
+@sapUiLineHeight: 18px;
+
+// SOME important control-specific parameters... 
+
+/* NotificationBar */
+@sapUiNotificationText: contrast(@sapUiNotificationBarBG, @sapUiTextInverted, @sapUiText);
+@sapUiNotificationTimestamp: contrast(@sapUiNotificationBarBG, lighten(@sapUiTextInverted,33), darken(@sapUiText,33));
+@sapUiNotificationBarCalloutBorder: @sapUiBase;
+@sapUiNotificationBarCalloutBorder_IE: @sapUiBase;
+@sapUiNotificationBarCalloutArr: @sapUiBase;
+@sapUiNotificationBarBG: @sapUiBaseBG;
+@sapUiNotificationBarBG_IE: @sapUiBaseBG;
+@sapUiNotifierSeparator: @sapUiBase;
+@sapUiMessageNotifierCountBG: #0F5D94;
+
+@sapUiLinkVisited: @sapUiLink;
+@sapUiLinkActive: @sapUiLink;
+@sapUiLinkHover: @sapUiLink;
+
+/* ToolPopup */
+@sapUiUx3ToolPopupInverted: ~"false";
+@sapUiUx3ToolPopupArrowRightMarginCorrection: 11px;
+
+@sapUiButtonDisabledBorderColor: @sapUiTextDisabled; 
+@sapUiButtonEmphasizedDisabledBorderColor: @sapUiButtonDisabledBorderColor; 
+@sapUiButtonAcceptDisabledBorderColor: @sapUiButtonDisabledBorderColor; 
+@sapUiButtonRejectDisabledBorderColor: @sapUiButtonDisabledBorderColor;
+@sapUiToggleButtonPressedBackground: @sapUiMediumBG;
+@sapUiToggleButtonPressedDisabledBackground: @sapUiExtraLightBG;
+
+@sapUiDatePickerTableBackground: lighten(desaturate(spin(@sapUiHighlightColor,165),18),8);
+@sapUiDatePickerTableBorderColor: @sapUiDatePickerTableBackground;

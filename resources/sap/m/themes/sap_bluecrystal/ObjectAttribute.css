@@ -1,0 +1,8 @@
+
+/* ============================================= */
+/* CSS for control sap.m/ObjectAttribute.control */
+/* ============================================= */
+
+.sapMLIBActive .sapMObjectAttributeDiv{
+	color: @sapUiLITextInverted;
+}

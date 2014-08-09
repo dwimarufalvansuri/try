@@ -1,0 +1,20 @@
+/* ============================================= */
+/* CSS for control sap.m/ComboBox.control        */
+/* ============================================= */
+
+.sapMComboBoxArrow {
+	display: inline-block;
+	cursor: pointer;
+	outline: none;
+}
+
+input.sapMComboBoxInputInner {
+	position: relative;
+	background-color: transparent;
+}
+
+input.sapMComboBoxHint {
+	position: absolute;
+	border-color: transparent;
+	pointer-events: none;
+}

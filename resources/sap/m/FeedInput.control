@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<control xmlns="http://www.sap.com/sap.ui.library.xsd" >
+	<name>FeedInput</name>
+	<documentation>The Feed Input allows the user to enter text for a new feed entry and then post it.</documentation>
+	<baseType>sap.ui.core/Control</baseType>
+	<properties>
+		<property group="Appearance" name="backgroundDesign" type="sap.m/BackgroundDesign" defaultValue="Translucent">
+			<documentation>Sets the background color of the feed input. Depending on the theme you can change the state of the background from &quot;Solid&quot; over &quot;Translucent&quot; to &quot;Transparent&quot;.</documentation>
+		</property>
+		<property group="Behavior" name="enabled" type="sap.ui.core/boolean" defaultValue="true">
+			<documentation>Set this flag to false to disable both text input and post button.</documentation>
+		</property>
+		<property group="Behavior" name="maxLength" type="sap.ui.core/int" defaultValue="0">
+			<documentation>The maximum length for the feed input's value. By default this is not limited.</documentation>
+		</property>
+		<property group="Appearance" name="placeholder" type="sap.ui.core/string" defaultValue="'Enter Message' (i18n)">
+			<documentation>The placeholder shown as long as the user has not entered a text value in the input area.</documentation>
+		</property>
+		<property group="Appearance" name="postButtonText" type="sap.ui.core/string" defaultValue="'Post' (i18n)">
+			<documentation>Use this property to set a custom text for the post button. The default text is limited to 10 characters length. The same is suggested for custom texts.</documentation>
+		</property>
+		<property group="Data" name="value" type="sap.ui.core/string">
+			<documentation>The text value of the feed input.</documentation>
+		</property>
+		<property group="Appearance" name="visible" type="sap.ui.core/boolean" defaultValue="true">
+			<documentation>Set this flag to false to hide the feed input on the screen.</documentation>
+		</property>
+	</properties>
+	<events>
+		<event name="post">
+			<documentation>The post event is triggered when the user has entered a value and pressed the post button. After firing this event the value is reset.</documentation>
+			<parameters>
+				<parameter name="value" type="sap.ui.core/string">
+					<documentation>The value of the feed input before reseting it.</documentation>
+				</parameter>
+			</parameters>
+		</event>
+	</events>
+</control>
