@@ -1,0 +1,12 @@
+
+/* ============================================= */
+/* CSS for control sap.m/ActionSheet.control */
+/* ============================================= */
+
+.sapMActionSheet{
+  width: 100%;
+}
+
+.sapMActionSheetDialog .sapMDialogScroll {
+	display: block;
+}

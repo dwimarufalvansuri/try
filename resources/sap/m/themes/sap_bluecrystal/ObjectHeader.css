@@ -1,0 +1,128 @@
+/* ============================================= */
+/* CSS for control sap.m/ObjectHeaderItem.control */
+/* ============================================= */
+
+.sapMOH {
+	font-family: @sapUiFontFamily;
+}
+
+.sapMOHC.sapMOHBgTransparent{
+	background-color: transparent;
+}
+
+.sapMOHC.sapMOHBgSolid{
+	background-color: @sapUiLightestBG;
+	border-bottom: 0.063rem @sapUiLightBG;
+}
+
+.sapMOHIntro {
+	color: @sapUiLightText;
+	font-size: @sapMFontMediumSize;
+}
+
+.sapMOHIntro.sapMOHIntroActive,
+.sapMOHTitle.sapMOHTitleActive>.sapMText{
+	color: @sapUiLink;
+	cursor: pointer;
+}
+
+.sapMOHTitle .sapMText {
+	color: @sapUiDarkText;
+	font-size: @sapMFontHeader2Size;
+}
+
+.sapMOHC .sapMOHTitle>.sapMText {
+	line-height: 1.313rem;
+	font-size: @sapMFontLargeSize;
+}
+
+.sap-phone .sapMOHTitle>.sapMText {
+	font-size: @sapMFontHeader4Size;
+}
+
+.sapMOHTitleArrow {
+	color: @sapUiLink;	
+}
+
+.sapMOHNumber {
+	font-family: @sapUiFontCondensedFamily;
+	font-stretch: condensed;	
+	font-size: @sapMFontHeader1Size;
+}
+
+.sapMOHNumberUnit {
+	font-size: @sapMFontSmallSize;
+}
+
+.sapMOHBottomRow {
+	font-size: @sapMFontMediumSize;
+}
+
+.sapMOH .sapMObjectAttributeDiv {
+	color: @sapUiLightText;
+}
+
+.sapMOH .sapMObjectAttributeActive{
+	color: @sapUiLink;
+}
+
+.sapMOHNumberStateNone {
+	color: @sapUiDarkText;
+}
+
+.sapMOHNumberStateError {
+	color: @sapUiNegativeText;		
+}
+
+.sapMOHNumberStateWarning {
+	color: @sapUiCriticalText;
+}
+
+.sapMOHNumberStateSuccess {
+	color: @sapUiPositiveText;
+}
+
+/*** styles for object header grid prototype ***/
+
+.sapUiRespGrid .sapMObjectNumberText{
+	font-family: @sapUiFontCondensedFamily;
+	font-stretch: condensed;   
+	font-size: @sapMFontHeader1Size;
+	font-weight: normal;
+}
+
+.sapUiRespGrid .sapMObjectNumberUnit{
+	font-size: @sapMFontSmallSize;
+}
+
+/*** styles for responsive object header prototype ***/
+
+.sapMOHR .sapMObjectNumberText {
+	font-family: @sapUiFontCondensedFamily;
+	font-stretch: condensed;
+	font-size: @sapMFontHeader1Size;
+}
+
+.sapMOHR > .sapMOHTitleDiv.sapMOHTitleIcon > .sapMOHIcon > .sapUiIcon{
+	line-height: 3rem;
+	font-size: 2.5rem;
+	color: @sapUiElement;
+}
+
+.sapMOHR.sapMOH > .sapMOHTitleDiv > .sapMOHTitle {
+	font-family:@sapUiFontHeaderFamily; 
+	font-size:@sapMFontHeader2Size; 
+	font-weight:@sapUiFontHeaderWeight;
+	color:@sapUiHeaderText;
+	line-height: 1.6875rem;
+}
+
+.sapMOHR.sapMOH > .sapMOHTitleDiv > .sapMOHIntro {
+	font-family: @sapUiFontFamily;
+	font-size: @sapMFontMediumSize;
+	font-weight: normal;
+	color: @sapUiLightText;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

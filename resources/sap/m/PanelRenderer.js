@@ -1,0 +1,7 @@
+/*!
+ * SAP UI development toolkit for HTML5 (SAPUI5)
+ * 
+ * (c) Copyright 2009-2014 SAP AG. All rights reserved
+ */
+jQuery.sap.declare("sap.m.PanelRenderer");sap.m.PanelRenderer={};
+sap.m.PanelRenderer.render=function(r,c){if(!c.getVisible()){return}r.write("<section");r.writeControlData(c);r.addClass("sapMPanel");r.addStyle("width",c.getWidth());r.addStyle("height",c.getHeight());r.writeClasses();r.writeStyles();r.write(">");if(c.getExpandable()){var I=c._getIcon();if(c.getExpanded()){I.addStyleClass("sapMPanelExpandableIconExpanded")}else{I.removeStyleClass("sapMPanelExpandableIconExpanded")}r.renderControl(I)}var h=c.getHeaderText();var H=c.getHeaderToolbar();if(H){H.setDesign(sap.m.ToolbarDesign.Transparent,true);if(c.getExpandable()){H.addStyleClass("sapMPanelHdrExpandable")}r.renderControl(H)}else if(h){r.write("<div");r.addClass("sapMPanelHdr");if(c.getExpandable()){r.addClass("sapMPanelHdrExpandable")}r.writeClasses();r.write(">");r.writeEscaped(h);r.write("</div>")}var o=c.getInfoToolbar();if(o&&c.getExpandable()){o.addStyleClass("sapMPanelExpandablePart")}if(o){o.setDesign(sap.m.ToolbarDesign.Info,true);r.renderControl(o)}r.write("<div");r.addClass("sapMPanelContent");r.addClass("sapMPanelBG");if(c.getExpandable()){r.addClass("sapMPanelExpandablePart")}r.writeClasses();r.write(">");var C=c.getContent();var l=C.length;for(var i=0;i<l;i++){r.renderControl(C[i])}r.write("</div>");r.write("</section>")};

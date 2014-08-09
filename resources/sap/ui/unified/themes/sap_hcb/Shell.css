@@ -1,0 +1,46 @@
+/* ============================================== */
+/* CSS for sap.ui.unfied.Shell.control (hcb)    */
+/* ============================================== */
+
+
+.sapUiUfdShellCurtain,
+.sapUiUfdShellBrand,
+.sapUiUfdShell .sapUiUfdShellHead {
+	background-color: @sapUiBaseBG;
+}
+
+.sapUiUfdShellHeadItm > span {
+	color: @sapUiBaseText;
+}
+
+.sapUiUfdShellHeadItm:active > span,
+.sapUiUfdShellHeadItm.sapUiUfdShellHeadItmSel:active > span,
+.sapUiUfdShellHeadItm.sapUiUfdShellHeadItmSel > span {
+	background-color: @sapUiHighlight;
+	-webkit-box-shadow: inset 0 -0.0625em @sapUiBaseBorder;
+	box-shadow: inset 0 -0.0625em @sapUiBaseBorder;
+}
+
+.sapUiUfdShell .sapUiUfdShellHead > div {
+	background-color: @sapUiBaseBG;
+	-webkit-box-shadow: inset 0 -0.0625em @sapUiBaseBorder;
+	box-shadow: inset 0 -0.0625em @sapUiBaseBorder;
+}
+
+.sapUiUfdShellHeadItmMarker > div:after, .sapUiUfdShellHeadItmMarker > div:before {
+    border-bottom-color: @sapUiBaseText;
+}
+
+/* User Item */
+
+.sapUiUfdShellHeadUsrItm {
+	border-color: @sapUiBaseText;
+}
+
+.sapUiUfdShellHeadUsrItm {
+	color: @sapUiBaseText;
+}
+
+.sapUiUfdShellHeadUsrItm:active > * {
+	background-color: @sapUiHighlight;
+}
