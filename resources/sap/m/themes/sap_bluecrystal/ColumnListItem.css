@@ -1,0 +1,88 @@
+.sap-desktop .sapMListTblRow:focus,
+.sap-desktop .sapMListTblSubRow:focus {
+	outline: 1px dotted @sapUiFocus;
+	outline-offset: -1px;
+}
+
+.sapMListTblSubRow {
+	background: @sapUiListTblPopinBG;
+}
+
+.sapMLIBSelected.sapMLIB + .sapMListTblSubRow {
+	background: @sapUiListTblPopinSelectedBG;
+}
+
+.sapMLIBActive.sapMLIB + .sapMListTblSubRow {
+	background: @sapUiListTblPopinActiveBG;
+}
+
+/* table popin */
+.sapMListTblSubCnt {
+	padding: .5rem 1rem;
+	box-sizing: border-box;
+}
+
+.sapMListTblSubCntRow{
+	padding-bottom: 0;
+}
+
+.sapMListTblSubCntSpr {
+	font-size: @sapUiListTblTextSize;
+}
+
+.sapMListTblSubCntRow + .sapMListTblSubCntRow {
+	margin-top: .5rem;
+}
+
+.sapMListTblSubCntHdr,
+.sapMListTblSubCntSpr,
+.sapMListTblSubCntVal {
+	vertical-align: top;
+}
+
+.sapMListTblSubCntValBlock {
+	margin-top: .25rem;
+	display : block;
+}
+
+.sapMListTblSubCntValInline{
+	display: inline-block;
+}
+
+.sapMListTblSubCntSpr,
+.sapMListTblSubCntHdr .sapMText,
+.sapMListTblSubCntHdr .sapMLabel {
+	color: @sapUiLightText;
+	padding-top: 0;
+}
+
+.sapMListTblSubCntVal .sapMText,
+.sapMListTblSubCntVal .sapMLabel {
+	color: @sapUiListTblPopinValueTextColor;
+	padding-top: 0;
+}
+
+.sapMListTblSubCntSpr {
+	padding-right: .5rem;
+}
+
+/********** COMPACT DESIGN ************/
+
+/* decrease vertical popin paddings */
+.sapUiSizeCompact .sapMListTblSubCnt {
+	padding-top: .25rem;
+	padding-bottom: .25rem;
+}
+
+/* popin padding */
+.sapUiSizeCompact .sapMListModeMultiSelect .sapMListTblSubCnt, 
+.sapUiSizeCompact .sapMListModeSingleSelectLeft .sapMListTblSubCnt {
+	padding-left: 2.5rem;
+}
+
+/* add extra padding to text controls for top aligned rowa */
+.sapUiSizeCompact .sapMListTblRowTop > .sapMListTblCell > .sapMLnk,
+.sapUiSizeCompact .sapMListTblRowTop > .sapMListTblCell > .sapMText,
+.sapUiSizeCompact .sapMListTblRowTop > .sapMListTblCell > .sapMLabel{
+	padding: .375rem 0;
+}

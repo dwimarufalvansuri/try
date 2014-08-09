@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<control xmlns="http://www.sap.com/sap.ui.library.xsd" >
+
+	<name>MultiComboBox</name>
+	<author>SAP AG </author>
+	<documentation>The multi select control provides a menu of predefined items that allows end users to choose options.</documentation>
+
+	<baseType>InputBase</baseType>
+	<properties>
+		<property group="Dimension" name="maxWidth" type="sap.ui.core/CSSSize" defaultValue="100%">
+			<documentation>Defines the maximum width of the MultiComboBox's field. This value can be provided in %, em, px… and all valid CSS measures.</documentation>
+		</property>
+	</properties>
+	<events>
+		<event name="selectionChange">
+			<documentation>Occurs when the user changes  the selected item. </documentation>
+		</event>
+		<event name="selectionFinish">
+			<documentation>Occurs when the user has finished selection of items in dropd
+own list.</documentation>
+		</event>
+	</events>
+	<aggregations default="items">
+		<aggregation cardinality="0..n" name="items" type="sap.ui.core/Item">
+			<documentation>Aggregation of items to be displayed.</documentation>
+		</aggregation>
+		<aggregation cardinality="0..1" name="popup" type="sap.ui.core/Control" visibility="hidden">
+			<documentation>Internal aggregation to hold the inner sap.m.Popover or sap.m.Dialog.</documentation>
+		</aggregation>
+	</aggregations>
+	<associations>
+		<association name="selectedItems" type="sap.ui.core/Item" cardinality="0..n">
+			<documentation>Retrieves the selected items from the aggregation named &lt;code&gt;items&lt;/code&gt;.</documentation>
+		</association>
+	</associations>
+	<methods>
+		<method type="sap.ui.core/boolean" name="isOpen">
+			<documentation>Checks if the select is open. It returns true when the select is currently open, this includes opening and closing animations, otherwise it returns false.</documentation>
+		</method>
+		<method name="close" type="sap.m/MultiComboBox">
+			<documentation>Closes the MultiComboBox's popup.</documentation>
+		</method>
+		<method name="getItemByKey" type="sap.ui.core/Item">
+			<documentation>Retrieves the first item from the aggregation named &lt;code&gt;items&lt;/code&gt;, based on it's key.</documentation>
+			<parameters>
+				<parameter name="sKey" type="sap.ui.core/string">
+					<documentation>An item key that identifies the item to be retrieved.</documentation>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="setSelectedKeys" type="sap.m/MultiComboBox">
+			<documentation>Sets selected items. Only items of valid keys are set as selected. Previous selected is removed.</documentation>
+			<parameters>
+				<parameter name="aKeys" type="sap.ui.core/string[]">
+					<documentation>An array of item keys that identifies the items to be set as selected.</documentation>
+				</parameter>
+			</parameters>
+		</method>
+		<method name="getSelectedKeys" type="sap.ui.core/string[]">
+			<documentation>Gets keys of selected items. Null if no items are selected.</documentation>
+		</method>
+	</methods>
+</control>
