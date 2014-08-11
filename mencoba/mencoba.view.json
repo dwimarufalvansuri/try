@@ -1,0 +1,11 @@
+{
+	"Type":"sap.ui.core.mvc.JSONView",
+	"controllerName":"mencoba.mencoba",
+	"content": [{
+		"Type":"sap.m.Page",
+		"title":"Title",
+		"content":[
+		
+		]
+	}]
+}

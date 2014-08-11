@@ -1,0 +1,714 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<!-- SCN Contribution by John Moy
+     This HTML/CSS/Javascript has been structured for explanatory purposes
+     and is not necessarily structured for optimum and productive use.
+     eg. hardcoded values should be properly declared as variables.
+-->
+  <head>
+    <title>SAP System Monitor</title>
+
+    <!-- Meta declarations -->
+    <!-- Change this if you want to allow scaling -->
+    <meta name="viewport" content="width=default-width; user-scalable=no" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <!-- Icon declarations -->
+    <!-- Need to use 'apple-touch-icon-precomposed' for iOS & Android support -->
+    <!-- For only iOS use <link rel="apple-touch-icon" href="icon.png" /> -->
+    <link rel="apple-touch-icon-precomposed" href="icon.png" />
+    
+    <!-- External Styles and Javascript -->
+    <!-- For below, comment/uncomment Web Version / PhoneGap Version as appropriate -->
+    
+    <!-- Web Version Only 
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>
+    -->
+    <!-- PhoneGap Version Only -->
+   
+    <link rel="stylesheet" href="jquery.mobile-1.0a2.min.css" />
+    <script type="text/javascript" charset="utf-8" src="jquery-1.4.4.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.0a2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    
+    
+    <!-- Local Javascript -->
+    <script type="text/javascript" charset="utf-8">
+
+    //
+    // Data declarations
+    //
+
+    // IMPORTANT: Set the below indicator accordingly
+    //            If Web Application, phoneGapWrapper = false
+    //            If PhoneGap Application, phoneGapWrapper = true
+    var phoneGapWrapper = true;    // indicator for web app or phonegap app
+
+    var watchID = null;             // watcher for accelerometer
+    var systemMonitoring = false;   // indicator for monitoring turned on/off
+    var cache = window.applicationCache;
+
+
+    //
+    // Event Handlers
+    //
+
+    // The following event handlers notify the users of events
+    // relating to the HTML5 application cache
+    // Detect offline mode (note this is not 100% reliable)
+    cache.addEventListener("error", function(e) {
+      popAlert("Error connecting to server.  Reverting to offline mode.");
+    }, false);
+
+    // Detect cache updated
+    cache.addEventListener("updateready", function(u) {
+      popAlert("New application version has been downloaded. Activating now ..");
+      cache.swapCache();
+      window.location.reload(true);
+    }, false);
+
+
+    //
+    // Initial function on load of HTML body
+    //
+    function onBodyLoad() {
+
+      // If the application is running within a phonegap wrapper,
+      // register event listener to ensure phonegap is ready first,
+      // otherwise proceed straight to initialisation routines
+
+      if (phoneGapWrapper) {
+        document.addEventListener("deviceready",onDeviceReady,false);
+      }
+      else {
+        initSysMon();
+      }
+    }
+
+    //
+    // PhoneGap Only: APIs are ready to call
+    //
+    function onDeviceReady() {
+      // Check accelerometer every 500 milliseconds
+      watchID = navigator.accelerometer.watchAcceleration(
+              onAcceleration,
+              function(){},
+              {frequency : 500}
+            );
+      // Initialise the application
+      initSysMon();
+    }
+
+    //
+    // PhoneGap Only: Monitor acceleration
+    //
+    function onAcceleration(accel) {
+      var smallShake = 0.3;  // Smaller number detects smaller shake
+      var largeShake = 1.2;  // Higher number detects higher shake
+      if (true === accel.is_updating) {
+        return;
+      }
+      
+      // set direction of title line animation on small shake
+      if (accel.x >= smallShake) {
+        increment = 0.05;
+      }
+      if (accel.x <= (0 - smallShake)) {
+        increment = -0.05;
+      }
+      
+      // trigger data refresh on large shake
+      if ($('#shake').val() == 'on') {
+        if (accel.x >= largeShake || accel.x <= (0 - largeShake)) {
+          refreshSystemData();
+        }
+      }
+
+    }
+
+
+    //
+    // Primary Application Routines
+    //
+
+    //
+    // Initialization
+    //
+    function initSysMon() {
+
+      // Initiate animation of cylon eye in logo
+      animateTitleLine();
+
+      // Version 2.0
+      // Retrieve values from local storage
+      getMetrics();
+      getSettings();
+
+      // If web app (no device capabilities), hide appropriate
+      // settings in the Settings page
+      if (!phoneGapWrapper) {
+        $('#nativeSettings').hide();
+      }
+
+    }
+
+    //
+    // Animate title image line
+    //
+    var increment;
+    function animateTitleLine() {
+      var x = 0.5;
+      increment = 0.01;
+      setInterval(progressLineAnimation, 50);
+
+      function progressLineAnimation() {
+        x += increment;
+        // Reverse direction if necessary
+        if (x >= 0.9 && increment > 0) {
+          increment = -0.01;
+        }
+        if (x <= 0.1 && increment < 0) {
+          increment = +0.01;
+        }
+
+        var gradientString = "-webkit-gradient(linear,left top,right top," +
+                             "color-stop(0, #8B0000)," +
+                             "color-stop(" + (x - 0.1) +
+                             ", #8B0000)," +
+                             "color-stop(" + (x) +
+                             ", #FFD39B)," +
+                             "color-stop(" + (x + 0.1) +
+                             ", #8B0000)," +
+                             "color-stop(1, #8B0000)" +
+                             ")";
+
+        $('#titlebar').css({background: gradientString});
+      }
+    }
+
+    //
+    // Get last metrics from local storage
+    //
+    function getMetrics() {
+
+      // Retrieve from local storage
+      var sysString = localStorage.getItem("sysMetric");
+
+      // Convert string to JSON object
+      var sys = JSON.parse(sysString);
+      if (sys != null) {
+        popAlert('Values initialized from local storage');
+        populateSystemData(sys);
+      }
+
+    }
+
+    //
+    // Save metrics to local storage
+    //
+    function setMetrics(sys) {
+
+      // Convert JSON object to string before saving
+      // (local storage only stores strings)
+      var sysString = JSON.stringify(sys);
+
+      // Save to local storage
+      localStorage.setItem("sysMetric", sysString);
+
+    }
+
+    //
+    // Get settings from local storage
+    //
+    function getSettings() {
+
+      $('#server').val(localStorage.getItem("server"));
+      $('#port').val(localStorage.getItem("port"));
+      $('#client').val(localStorage.getItem("client"));
+      $('#username').val(localStorage.getItem("username"));
+      $('#password').val(localStorage.getItem("password"));
+      $('#refreshRate').val(localStorage.getItem("refreshRate"));
+      $('#shake').val(localStorage.getItem("shake"));
+      $('#sounds').val(localStorage.getItem("sounds"));
+      $('#vibration').val(localStorage.getItem("vibration"));
+
+    }
+
+    //
+    // Save settings to local storage
+    //
+    function setSettings() {
+
+      if (!connectionParamsExist(false)) {
+        return;
+      }
+
+      localStorage.setItem("server",      $('#server').val());
+      localStorage.setItem("port",        $('#port').val());
+      localStorage.setItem("client",      $('#client').val());
+      localStorage.setItem("username",    $('#username').val());
+      localStorage.setItem("password",    $('#password').val());
+      localStorage.setItem("refreshRate", $('#refreshRate').val());
+      localStorage.setItem("shake",       $('#shake').val());
+      localStorage.setItem("sounds",      $('#sounds').val());
+      localStorage.setItem("vibration",   $('#vibration').val());
+      
+      popAlert('Values saved to local storage');
+    }
+
+    //
+    // Function returns false if connection parameters are missing
+    //
+    function connectionParamsExist(navigateToSettings) {
+
+      var server   = $('#server').val();
+      var port     = $('#port').val();
+      var client   = $('#client').val();
+      var username = $('#username').val();
+      var password = $('#password').val();
+
+      // Return false if any parameters not defined
+      if (!server || !port || !client || !username || !password) {
+        popAlert('Connection parameters missing.  Please define missing values in Settings.');
+
+        systemMonitoring = false;
+        $('#sysCPU_MONITOR').html("Resume<br/>Monitoring");
+        $('#sysMEM_MONITOR').html("Resume<br/>Monitoring");
+
+        if (navigateToSettings) {
+          $.mobile.changePage("#settingsConnection", "pop");
+        }
+
+        return false;
+      }
+
+      return true;
+    }
+
+    //
+    // Toggle buttons for starting and stopping system monitoring
+    //
+    function toggleSystemMonitoring() {
+      if (!systemMonitoring) {
+         systemMonitoring = true;
+         $('#sysCPU_MONITOR').html("Stop<br/>Monitoring");
+         $('#sysMEM_MONITOR').html("Stop<br/>Monitoring");
+         refreshSystemData();
+      }
+      else {
+         systemMonitoring = false;
+         $('#sysCPU_MONITOR').html("Resume<br/>Monitoring");
+         $('#sysMEM_MONITOR').html("Resume<br/>Monitoring");
+      }
+    }
+
+    //
+    // Refresh system data from SAP ABAP server
+    //
+    function refreshSystemData() {
+      if (!systemMonitoring) {
+        return;
+      }
+      if (!connectionParamsExist(true)) {
+        return;
+      }
+      
+      // Phonegap Only: play sound on sending request
+      if ($('#sounds').val() == 'on') {
+        navigator.notification.beep(1);
+      }
+
+      // Construct URL string
+      var urlString = "http://" +
+                      $('#server').val() + ":" +
+                      $('#port').val() +
+                      "/sap/zsystemmetrics";
+
+      // Trigger AJAX call to ABAP server
+      $.ajax({
+         type: "GET",
+         url: urlString,
+         data: "",
+         dataType: "json",
+         beforeSend: function(xhr) {
+           xhr.setRequestHeader('sap-user', $('#username').val());
+           xhr.setRequestHeader('sap-password', $('#password').val());
+           xhr.setRequestHeader('sap-client', $('#client').val());
+         },
+         success: function(sys){
+           // Phonegap Only: vibrate phone on receiving response
+           if ($('#vibration').val() == 'on') {
+             try {
+               navigator.notification.vibrate();
+             }
+             catch (e) {
+               // Not supported
+             }
+           }
+
+           // Save metrics to local storage
+           setMetrics(sys);
+
+           // Display metrics
+           if (sys["sysmetric"] != null) {
+             populateSystemData(sys);
+           }
+         },
+         error: function( result ){
+            // Evaluate result.responseText if contents are
+            // required for debugging purposes
+            alert(result.responseText);
+         }
+      }); // Ajax posting
+
+      // Get latest refresh rate
+      var refreshRate = parseInt($('#refreshRate').val());
+
+      // Schedule next auto-refresh based on current refresh rate
+      setTimeout("refreshSystemData()",(refreshRate*1000));
+    }
+
+    //
+    // Populate JSON object retrieved from server
+    //
+    function populateSystemData(sys) {
+
+      // Data declarations
+      var canvas;
+      var cwidth = viewPort().width - 30;
+      var cheight = 100;
+
+      // Extract values from JSON object
+      var currentCPU = parseInt(sys["sysmetric"].cpu_used);
+      var freeMEM = parseInt(sys["sysmetric"].mem_free/1000);
+      var usedMEM = parseInt(sys["sysmetric"].mem_used/1000);
+
+      // Populate equivalent texts in the DOM
+      $('#cpu_updated').text(sys["sysmetric"].updated);
+      $('#mem_updated').text(sys["sysmetric"].updated);
+      $('#mem_free').text(freeMEM);
+      $('#mem_used').text(usedMEM);
+
+      // Draw canvas for CPU usage
+      var barchartColor = ["#8B0000","#DC143C"];
+      plotBarChartData("chartCPU",cwidth,cheight,currentCPU,100,barchartColor);
+
+      // Draw canvas for Memory breakdown
+      var piechartColor = ["#CD853F","#FFE7BA"];
+      var piechartData = [usedMEM,freeMEM];
+      plotPieChartData("chartMEM",parseInt(cwidth/2),90,85,piechartData,piechartColor);
+    }
+
+    //
+    // Draw barchart on HTML canvas
+    //
+    function plotBarChartData(canvasId, cwidth, cheight, val, max, chartColor) {
+
+      // Draw bar chart
+      var canvas = document.getElementById(canvasId);
+      canvas.width = cwidth;
+      var ctx = canvas.getContext("2d");
+
+      // Fill underlying 100% layer
+      ctx.fillStyle = "#fff";
+      ctx.fillRect (0, 0, cwidth, cheight);
+
+      // Fill val% layer with a gradient
+      var theGradient = ctx.createLinearGradient(0, 0, 0, cheight);
+      theGradient.addColorStop(0, chartColor[0]);
+      theGradient.addColorStop(0.5, chartColor[1]);
+      theGradient.addColorStop(1, chartColor[0]);
+      ctx.fillStyle = theGradient;
+      ctx.fillRect (0, 0, cwidth*(val/max), cheight);
+
+      // Draw vertical lines in 10% increments
+      ctx.beginPath();
+      for (var x = 0; x <= 100; x+= 10) {
+        ctx.moveTo(x*(cwidth/100), 0);
+        ctx.lineTo(x*(cwidth/100), cheight);
+      }
+      ctx.strokeStyle = "#eee";
+      ctx.stroke();
+
+      // Display the value as text in the canvas
+      var valText = val + " %";
+      ctx.font = "bold 20px sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle="#000";
+      ctx.fillText(valText, cwidth/2, cheight/2);
+    }
+
+    //
+    // Draw piechart on HTML canvas
+    //
+    function plotPieChartData(canvasId,xcoord,ycoord,radius,chartData,chartColor) {
+
+      // Data declarations
+      var canvas;
+      var ctx;
+      var lastend = 0;
+
+      // Calculate chart total
+      var total = 0;
+      for (var j = 0; j < chartData.length; j++) {
+        total += (typeof chartData[j] == 'number') ? chartData[j] : 0;
+      }
+
+      // Draw pie chart
+      canvas = document.getElementById(canvasId);
+      ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < chartData.length; i++) {
+        ctx.fillStyle = chartColor[i];
+        ctx.beginPath();
+        ctx.moveTo(xcoord,ycoord);
+        ctx.arc(xcoord,ycoord,radius,lastend,lastend+(Math.PI*2*(chartData[i]/total)),false);
+        ctx.lineTo(xcoord,ycoord);
+        ctx.fill();
+        lastend += Math.PI*2*(chartData[i]/total);
+      }
+    }
+
+    //
+    // Get viewport screen dimensions
+    //
+    function viewPort() {
+
+      var h = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+      var w = window.innerWidth || document.documentElement.clientWidth || document.getElementsByTagName('body')[0].clientWidth;
+
+      return { width : w , height : h }
+
+    }
+
+    //
+    //  Utility function to display alert messages
+    //
+    function popAlert(message) {
+
+      // Populate the message text
+      $('#alert_message').text(message);
+
+      // Popup the message dialog
+      $.mobile.changePage("#message", "pop");
+
+    }
+    </script>
+
+    <!-- Local styles -->
+    <style type="text/css">
+      #titlebox {
+        width: 85%;
+        height: 80px;
+        margin: 20px;
+        padding: 10px;
+        text-align:center;
+        /* for rounded corners */
+        -webkit-border-radius: 30px;
+        -moz-border-radius: 30px;
+        border-radius: 30px;
+        /* for box shadow */
+        -webkit-box-shadow: #838b8b 3px 3px 3px;
+        -moz-box-shadow: #838b8b 3px 3px 3px;
+        box-shadow: #838b8b 3px 3px 3px;
+        /* for gradient */
+        background-image: -moz-linear-gradient(top,#333,#4A708B);
+        background-image: -webkit-gradient(linear,left bottom,left top,color-stop(0, #4A708B),color-stop(1,#333));
+      }
+      #titlereflect {
+        color: #ecf1ef;
+        -webkit-box-reflect: below -7px
+        -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(100, 100, 100, 0.2)));
+      }
+      #titlebar {
+        width: 85%;
+        height: 8px;
+        margin: 4px;
+        /* for rounded corners */
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+
+<!-- Commence body declaration -->
+<body onload="onBodyLoad()">
+
+<!-- Home Page -->
+<div data-role="page" data-theme="b" id="home">
+  <div id="homeheader">
+    <center>
+    <div id="titlebox">
+    <h2><div id="titlereflect">SAP System Monitor</div></h2>
+    <center><div id="titlebar"/></center>
+    </div>
+    </center>
+  </div>
+  <div data-role="content">
+    <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a">
+      <li><a href="#sysCPU">Operating System Metrics</a></li>
+      <li><a href="#settingsConnection">Settings</a></li>
+      <li><a href="#about" data-transition="flip" data-rel="dialog">About</a></li>
+    </ul>
+  </div>
+</div><!-- /Home Page -->
+
+<!-- System CPU -->
+<div data-role="page" data-theme="b" id="sysCPU">
+  <div data-role="header" data-theme="a">
+    <a href="#home" data-icon="arrow-l">Back</a>
+    <h1>System CPU</h1>
+    <span id="sysCPU_MONITOR" onclick="toggleSystemMonitoring();" data-role="button" data-icon="alert" class="ui-btn-right">Start</span>
+    <div data-role="navbar" data-theme="b">
+      <ul>
+        <li><a href="#sysCPU" class="ui-btn-active" data-transition="fade">CPU</a></li>
+        <li><a href="#sysMEM" data-transition="fade">Memory</a></li>
+      </ul>
+    </div><!-- /navbar -->
+  </div>
+  <div data-role="content">
+    <small>
+    CPU Usage:
+    <br/>
+    <canvas id="chartCPU" width="1000" height="100"></canvas><br/>
+    <br/>
+    Last Update: <span id="cpu_updated"></span>
+    </small>
+  </div>
+</div><!-- /System CPU -->
+
+<!-- System Memory -->
+<div data-role="page" data-theme="b" id="sysMEM">
+  <div data-role="header" data-theme="a">
+    <a href="#home" data-icon="arrow-l">Back</a>
+    <h1>System Memory</h1>
+    <span id="sysMEM_MONITOR" onclick="toggleSystemMonitoring();" data-role="button" data-icon="alert" class="ui-btn-right">Start</span>
+    <div data-role="navbar" data-theme="b">
+      <ul>
+        <li><a href="#sysCPU" data-transition="fade">CPU</a></li>
+        <li><a href="#sysMEM" class="ui-btn-active" data-transition="fade">Memory</a></li>
+      </ul>
+    </div><!-- /navbar -->
+  </div>
+  <div data-role="content">
+    <small>
+    <fieldset class="ui-grid-a">
+       <div class="ui-block-a"><label>Used Memory</label><br/>
+          <span style="color: #CD853F;">&#9608;</span>&nbsp;<span id="mem_used"></span> MB
+       </div>
+       <div class="ui-block-b"><label>Free Memory</label><br/>
+          <span style="color: #FFE7BA;">&#9608;</span>&nbsp;<span id="mem_free"></span> MB
+       </div>
+    </fieldset>
+    <canvas id="chartMEM" width="1000" height="180"></canvas><br/>
+    Last Update: <span id="mem_updated"></span>
+    </small>
+  </div>
+</div><!-- /System Memory -->
+
+<!-- Settings Connection -->
+<div data-role="page" data-theme="b" id="settingsConnection">
+  <div data-role="header" data-theme="a">
+    <a href="#home" data-icon="arrow-l">Back</a>
+    <h1>Settings</h1>
+    <span onclick="setSettings();" data-role="button" data-icon="check" class="ui-btn-right">Save</span>
+    <div data-role="navbar" data-theme="b">
+      <ul>
+        <li><a href="#settingsConnection" class="ui-btn-active" data-transition="fade">Connection</a></li>
+        <li><a href="#settingsPolling" data-transition="fade">Polling</a></li>
+      </ul>
+    </div><!-- /navbar -->
+  </div>
+  <div data-role="content">
+    <form action="#" method="get">
+    <label for="server">Server:</label>
+    <input type="text" id="server" name="server" value="" placeholder="Please specify. eg. local.nsp.system"/>
+    <label for="port">Port:</label>
+      <input type="text" id="port" name="port" value="" placeholder="Please specify. eg. 8000">
+      <label for="client">Client:</label>
+      <input type="text" id="client" name="client" value="" placeholder="Please specify. eg. 000">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" value="Please specify username.">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" value="Please specify password.">
+    </form>
+  </div>
+</div><!-- /Settings Connection -->
+
+<!-- Settings Polling -->
+<div data-role="page" data-theme="b" id="settingsPolling">
+  <div data-role="header" data-theme="a">
+    <a href="#home" data-icon="arrow-l">Back</a>
+    <h1>Settings</h1>
+    <span onclick="setSettings();" data-role="button" data-icon="check" class="ui-btn-right">Save</span>
+    <div data-role="navbar" data-theme="b">
+      <ul>
+        <li><a href="#settingsConnection" data-transition="fade">Connection</a></li>
+        <li><a href="#settingsPolling" class="ui-btn-active" data-transition="fade">Polling</a></li>
+      </ul>
+    </div><!-- /navbar -->
+  </div>
+  <div data-role="content">
+    <form action="#" method="get">
+      <center>
+      <div data-role="fieldcontain">
+        <label for="slider">Automatic polling interval (seconds):</label>
+        <input type="range" name="refreshRate" id="refreshRate" value="10" min="5" max="300">
+      </div>
+      <div id="nativeSettings" data-role="fieldcontain">
+        <label for="shake">Shake phone to tigger manual polling:</label>
+        <select name="shake" id="shake" data-role="slider">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+        <label for="sounds">Sounds when sending request:</label>
+        <select name="sounds" id="sounds" data-role="slider">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+        <label for="vibration">Vibration when receiving response:</label>
+        <select name="vibration" id="vibration" data-role="slider">
+          <option value="off">Off</option>
+          <option value="on">On</option>
+        </select>
+      </div>
+      </center>
+    </form>
+  </div>
+</div><!-- /Settings Polling -->
+
+<!-- About -->
+<div data-role="page" data-theme="b" id="about">
+  <div data-role="header" data-theme="a">
+    <a href="#home" data-icon="arrow-l">Back</a>
+    <h1>About</h1>
+  </div>
+  <div data-role="content">
+    <p>Extended jQuery Mobile Demo</p>
+    <p>SCN Contribution by John Moy.</p>
+    <p>This demonstrates a basic mobile SAP system monitoring tool utilising a
+     jQuery Mobile Web App, extending it with HTML5 / CSS3 / Javascript techniques, and
+     consuming a lightweight RESTful data feed in JSON format from an SAP ABAP server.</p>
+  </div>
+</div><!-- /About -->
+
+<!-- Message -->
+<div data-role="dialog" data-theme="b" id="message">
+  <div data-role="header" data-theme="a">
+    <h1>&nbsp;</h1>
+  </div>
+  <div data-role="content">
+    <p id="alert_message"></p>
+    <a href="" data-role="button" data-theme="c"><center>OK</center></a>
+  </div>
+  <div data-role="footer" data-theme="a">
+  </div>
+</div><!-- /Message -->
+
+</body>
+</html>
