@@ -1,0 +1,12 @@
+.sapUiBusy {
+  background-image: url(img/Busy.gif);
+  display: block;
+  width: 48px;
+  height: 48px;
+  outline: none;
+  cursor: wait;
+}
+
+.sapUiBlyBusy {
+	cursor: wait;
+}
